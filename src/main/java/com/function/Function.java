@@ -152,42 +152,4 @@ public class Function {
                 .header("Content-Type", "application/json")
                 .build();
     }
-
-    // ===================== LIBROS =====================
-    @FunctionName("libros")
-    public HttpResponseMessage getLibros(
-            @HttpTrigger(name = "reqLibros", methods = {
-                    HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-            final ExecutionContext context) {
-
-        try {
-            Connection conn = DBConnection.getConnection();
-
-            String sql = "SELECT ID_LIBRO, TITULO, DISPONIBLE FROM LIBROS";
-
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            List<Map<String, Object>> libros = new ArrayList<>();
-
-            while (rs.next()) {
-                Map<String, Object> libro = new HashMap<>();
-                libro.put("idLibro", rs.getInt("ID_LIBRO"));
-                libro.put("titulo", rs.getString("TITULO"));
-                libro.put("disponible", rs.getString("DISPONIBLE"));
-                libros.add(libro);
-            }
-
-            return request.createResponseBuilder(HttpStatus.OK)
-                    .header("Content-Type", "application/json")
-                    .body(libros)
-                    .build();
-
-        } catch (Exception e) {
-            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .header("Content-Type", "application/json")
-                    .body(e.getMessage())
-                    .build();
-        }
-    }
 }
