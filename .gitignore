@@ -8,3 +8,5 @@ target/
 .classpath
 .project
 .settings/
+local.settings.json
+.claude/
